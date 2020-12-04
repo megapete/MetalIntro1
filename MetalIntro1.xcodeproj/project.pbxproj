@@ -12,6 +12,7 @@
 		D3372E582579830500FF5B30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3372E572579830500FF5B30 /* Assets.xcassets */; };
 		D3372E5B2579830500FF5B30 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D3372E592579830500FF5B30 /* Main.storyboard */; };
 		D3372E652579887D00FF5B30 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3372E642579887D00FF5B30 /* Renderer.swift */; };
+		D3A1487A2579B2AB003EE146 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = D3A148792579B2AB003EE146 /* Shaders.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,9 @@
 		D3372E5C2579830500FF5B30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D3372E5D2579830500FF5B30 /* MetalIntro1.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MetalIntro1.entitlements; sourceTree = "<group>"; };
 		D3372E642579887D00FF5B30 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		D3A148722579B199003EE146 /* MetalIntro1-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MetalIntro1-Bridging-Header.h"; sourceTree = "<group>"; };
+		D3A148772579B225003EE146 /* ShaderDefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderDefinitions.h; sourceTree = "<group>"; };
+		D3A148792579B2AB003EE146 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,10 +62,13 @@
 				D3372E532579830400FF5B30 /* AppDelegate.swift */,
 				D3372E552579830400FF5B30 /* ViewController.swift */,
 				D3372E642579887D00FF5B30 /* Renderer.swift */,
+				D3A148772579B225003EE146 /* ShaderDefinitions.h */,
+				D3A148792579B2AB003EE146 /* Shaders.metal */,
 				D3372E572579830500FF5B30 /* Assets.xcassets */,
 				D3372E592579830500FF5B30 /* Main.storyboard */,
 				D3372E5C2579830500FF5B30 /* Info.plist */,
 				D3372E5D2579830500FF5B30 /* MetalIntro1.entitlements */,
+				D3A148722579B199003EE146 /* MetalIntro1-Bridging-Header.h */,
 			);
 			path = MetalIntro1;
 			sourceTree = "<group>";
@@ -97,6 +104,7 @@
 				TargetAttributes = {
 					D3372E4F2579830400FF5B30 = {
 						CreatedOnToolsVersion = 12.1;
+						LastSwiftMigration = 1210;
 					};
 				};
 			};
@@ -135,6 +143,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3A1487A2579B2AB003EE146 /* Shaders.metal in Sources */,
 				D3372E562579830400FF5B30 /* ViewController.swift in Sources */,
 				D3372E652579887D00FF5B30 /* Renderer.swift in Sources */,
 				D3372E542579830400FF5B30 /* AppDelegate.swift in Sources */,
@@ -275,6 +284,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MetalIntro1/MetalIntro1.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -287,6 +297,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.huberistech.MetalIntro1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MetalIntro1/MetalIntro1-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -296,6 +308,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MetalIntro1/MetalIntro1.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -308,6 +321,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.huberistech.MetalIntro1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MetalIntro1/MetalIntro1-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

@@ -12,6 +12,10 @@ class Renderer : NSObject, MTKViewDelegate {
     
     let device: MTLDevice
     let commandQueue: MTLCommandQueue
+    
+    let pipelineState: MTLRenderPipelineState
+    
+    let vertexBuffer: MTLBuffer
 
     // This is the initializer for the Renderer class.
     // We will need access to the mtkView later, so we add it as a parameter here.
@@ -20,6 +24,43 @@ class Renderer : NSObject, MTKViewDelegate {
         device = mtkView.device!
 
         commandQueue = device.makeCommandQueue()!
+        
+        // Create the Render Pipeline
+        do {
+            pipelineState = try Renderer.buildRenderPipelineWith(device: device, metalKitView: mtkView)
+        }
+        catch {
+            print("Unable to compile render pipeline state: \(error)")
+            return nil
+        }
+        
+        // Create our vertex data
+        let vertices = [Vertex(color: [1, 0, 0, 1], pos: [-1, -1]),
+                    Vertex(color: [0, 1, 0, 1], pos: [0, 1]),
+                    Vertex(color: [0, 0, 1, 1], pos: [1, -1])]
+        
+        // And copy it to a Metal buffer...
+        vertexBuffer = device.makeBuffer(bytes: vertices, length: vertices.count * MemoryLayout<Vertex>.stride, options: [])!
+    }
+    
+    // Create our custom rendering pipeline, which loads shaders using `device`, and outputs to the format of `metalKitView`
+    class func buildRenderPipelineWith(device: MTLDevice, metalKitView: MTKView) throws -> MTLRenderPipelineState {
+        
+        // Create a new pipeline descriptor
+        let pipelineDescriptor = MTLRenderPipelineDescriptor()
+        
+        // Setup the shaders in the pipeline
+        // PCH: makeDefaultLibrary is the collection of all the compiled Metal shader files in the project
+        let library = device.makeDefaultLibrary()
+        
+        pipelineDescriptor.vertexFunction = library?.makeFunction(name: "vertexShader")
+        pipelineDescriptor.fragmentFunction = library?.makeFunction(name: "fragmentShader")
+        
+        // Setup the output pixel format to match the pixel format of the metal kit view
+        pipelineDescriptor.colorAttachments[0].pixelFormat = metalKitView.colorPixelFormat
+        
+        // Compile the configured pipeline descriptor to a pipeline state object
+        return try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
     }
 
     // mtkView will automatically call this function
@@ -38,14 +79,24 @@ class Renderer : NSObject, MTKViewDelegate {
             return
         }
 
-        // Change default settings. For example, we change the clear color from black to red.
-        renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(1, 0, 0, 1)
+        // Change default settings. For example, uncomment the following line to change the clear color from black to red.
+        // renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(1, 0, 0, 1)
         
         // We compile renderPassDescriptor to a MTLRenderCommandEncoder.
         guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) else
         {
             return
         }
+        
+        // Setup render commands to encode
+        // We tell it what render pipeline to use
+        renderEncoder.setRenderPipelineState(pipelineState)
+        
+        // What vertex buffer data to use
+        renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
+        
+        // And what to draw
+        renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3)
         
         // This finalizes the encoding of drawing commands.
         renderEncoder.endEncoding()
